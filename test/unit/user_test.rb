@@ -2,8 +2,9 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def new_user(attributes = {})
-    attributes[:username] ||= 'foo'
-    attributes[:email] ||= 'foo@example.com'
+    attributes[:full_name] ||= 'Alain Bloch'
+    attributes[:username] ||= 'alainbloch'
+    attributes[:email] ||= 'alainbloch@gmail.com'
     attributes[:password] ||= 'abc123'
     attributes[:password_confirmation] ||= attributes[:password]
     user = User.new(attributes)
@@ -17,6 +18,20 @@ class UserTest < ActiveSupport::TestCase
   
   def test_valid
     assert new_user.valid?
+  end
+  
+  def test_length_of_bio
+    long_bio = Faker::Lorem.paragraphs(2).to_s
+    assert(new_user(:bio => long_bio).errors.on(:bio))
+  end
+  
+  def test_length_of_full_name
+    long_name = Faker::Lorem.paragraph
+    assert(new_user(:full_name => long_name).errors.on(:full_name))
+  end
+  
+  def test_require_full_name
+    assert new_user(:full_name => '').errors.on(:full_name)
   end
   
   def test_require_username
