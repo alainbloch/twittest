@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  
   def new_user(attributes = {})
     attributes[:full_name] ||= 'Alain Bloch'
     attributes[:username] ||= 'alainbloch'
@@ -12,90 +13,106 @@ class UserTest < ActiveSupport::TestCase
     user
   end
   
-  def setup
-    User.delete_all
+  context "a user instance" do
+    should_have_many :followers
+    should_have_many :followings
   end
   
-  def test_valid
-    assert new_user.valid?
+  context "a new user" do
+  
+    setup do
+      User.delete_all
+    end
+  
+    should "have valid new user" do
+      assert new_user.valid?
+    end
+  
+    should "not be valid if bio is too long" do
+      long_bio = Faker::Lorem.paragraphs(2).to_s
+      assert(new_user(:bio => long_bio).errors.on(:bio))
+    end
+  
+    should "not be valid if full name is too long" do
+      long_name = Faker::Lorem.paragraph
+      assert(new_user(:full_name => long_name).errors.on(:full_name))
+    end
+  
+    should "require a full name" do
+      assert new_user(:full_name => '').errors.on(:full_name)
+    end
+  
+    should "require a username" do
+      assert new_user(:username => '').errors.on(:username)
+    end
+  
+    should "require a password" do
+      assert new_user(:password => '').errors.on(:password)
+    end
+  
+    should "not be valid if email is not correct" do
+      assert new_user(:email => 'foo@bar@example.com').errors.on(:email)
+    end
+  
+    should "not be valid if email is not unique" do
+      new_user(:email => 'bar@example.com').save!
+      assert new_user(:email => 'bar@example.com').errors.on(:email)
+    end
+  
+    should "not be valid if username is not unique" do
+      new_user(:username => 'uniquename').save!
+      assert new_user(:username => 'uniquename').errors.on(:username)
+    end
+  
+    should "not be valid if username has odd characters" do
+      assert new_user(:username => 'odd ^&(@)').errors.on(:username)
+    end
+  
+    should "not be valid if password is too short" do
+      assert new_user(:password => 'bad').errors.on(:password)
+    end
+  
+    should "not be valid if password isn't confirmed" do
+      assert new_user(:password_confirmation => 'nonmatching').errors.on(:password)
+    end
+  
+    should "generate a password hash and salt upon creation" do
+      user = new_user
+      user.save!
+      assert user.password_hash
+      assert user.password_salt
+    end
+  
   end
   
-  def test_length_of_bio
-    long_bio = Faker::Lorem.paragraphs(2).to_s
-    assert(new_user(:bio => long_bio).errors.on(:bio))
-  end
+  context "a created user" do
+    
+    setup do
+      User.delete_all
+      @user = new_user(:username => 'foobar', :password => 'secret', :email => 'foo@bar.com')
+      @user.save!
+    end
+    
+    context "when authenticating" do
   
-  def test_length_of_full_name
-    long_name = Faker::Lorem.paragraph
-    assert(new_user(:full_name => long_name).errors.on(:full_name))
-  end
+      should "authenticate by username" do
+        assert_equal @user, User.authenticate('foobar', 'secret')
+      end
   
-  def test_require_full_name
-    assert new_user(:full_name => '').errors.on(:full_name)
-  end
+      should "authenticate by email" do
+        assert_equal @user, User.authenticate('foo@bar.com', 'secret')
+      end
   
-  def test_require_username
-    assert new_user(:username => '').errors.on(:username)
-  end
+      should "not authenticate with a bad username" do
+        assert_nil User.authenticate('nonexisting', 'secret')
+      end
   
-  def test_require_password
-    assert new_user(:password => '').errors.on(:password)
-  end
+      should "not authenticate with a bad password" do
+        assert_nil User.authenticate('foobar', 'badpassword')
+      end
+      
+    end
   
-  def test_require_well_formed_email
-    assert new_user(:email => 'foo@bar@example.com').errors.on(:email)
   end
-  
-  def test_validate_uniqueness_of_email
-    new_user(:email => 'bar@example.com').save!
-    assert new_user(:email => 'bar@example.com').errors.on(:email)
-  end
-  
-  def test_validate_uniqueness_of_username
-    new_user(:username => 'uniquename').save!
-    assert new_user(:username => 'uniquename').errors.on(:username)
-  end
-  
-  def test_validate_odd_characters_in_username
-    assert new_user(:username => 'odd ^&(@)').errors.on(:username)
-  end
-  
-  def test_validate_password_length
-    assert new_user(:password => 'bad').errors.on(:password)
-  end
-  
-  def test_require_matching_password_confirmation
-    assert new_user(:password_confirmation => 'nonmatching').errors.on(:password)
-  end
-  
-  def test_generate_password_hash_and_salt_on_create
-    user = new_user
-    user.save!
-    assert user.password_hash
-    assert user.password_salt
-  end
-  
-  def test_authenticate_by_username
-    User.delete_all
-    user = new_user(:username => 'foobar', :password => 'secret')
-    user.save!
-    assert_equal user, User.authenticate('foobar', 'secret')
-  end
-  
-  def test_authenticate_by_email
-    User.delete_all
-    user = new_user(:email => 'foo@bar.com', :password => 'secret')
-    user.save!
-    assert_equal user, User.authenticate('foo@bar.com', 'secret')
-  end
-  
-  def test_authenticate_bad_username
-    assert_nil User.authenticate('nonexisting', 'secret')
-  end
-  
-  def test_authenticate_bad_password
-    User.delete_all
-    new_user(:username => 'foobar', :password => 'secret').save!
-    assert_nil User.authenticate('foobar', 'badpassword')
-  end
+
 end
