@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   
-  before_filter :get_user, :only => [:show, :edit]
-  before_filter :correct_user_required, :only => [:edit]
+  before_filter :get_user, :only => [:show, :edit, :update, :destroy]
+  before_filter :correct_user_required, :only => [:edit, :update, :destroy]
   
   def new
     @user = User.new
@@ -27,11 +27,18 @@ class UsersController < ApplicationController
   end
   
   def update
-    
+    if @user.update_attributes(params[:user])
+      flash[:notice] = "User has been updated."
+      redirect_to edit_user_path(@user)
+    else
+      flash[:error]  = "Something went wrong."
+      render :action => "edit"
+    end
   end
   
   def destroy
-    
+    @user.destroy
+    redirect_to logout_path
   end
   
 private
