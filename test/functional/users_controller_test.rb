@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
-
+  
   context "when creating a user" do
 
     should "have a new user page" do
@@ -16,7 +16,7 @@ class UsersControllerTest < ActionController::TestCase
         assert_template 'new'
       end
     end
-  
+
     should "redirect to the root page if the created user is valid" do
       assert_difference "User.count" do
         User.any_instance.stubs(:valid?).returns(true)
@@ -27,76 +27,141 @@ class UsersControllerTest < ActionController::TestCase
     end
 
   end
-  
+
   context "when viewing an individual user" do
-    
+  
     setup do
       @user = users(:foo)
-      get :show, :id => @user.id
+      @user_id = @user.id
     end
-    
-    context "when not logged in" do      
+  
+    context "when not logged in" do
+      setup do      
+        get :show, :id => @user_id
+      end
       should_assign_to :user
       should_respond_with :success
       should_render_template :show
     end
-    
+  
     context "when logged in as the user" do
+      setup do
+        get :show, {:id => @user_id}, {:user_id => @user.id}
+      end
       should_assign_to :user
       should_respond_with :success
       should_render_template :show
     end
-    
+  
     context "when logged in as someone else" do
+      setup do
+        get :show, {:id => @user_id}, {:user_id => users(:bar).id}
+      end
       should_assign_to :user
       should_respond_with :success
       should_render_template :show
     end
-  
+
   end
-  
+
   context "when trying to edit a user" do
     
     setup do
       @user = users(:foo)
+      @user_id = @user.id
     end
-    
+  
     context "when not logged in" do
-      
       setup do
-        get :edit, {:id => @user.id}, nil
+        get :edit, {:id => @user_id}, nil
       end
-      
       should_assign_to :user
       should_respond_with :redirect
       should_redirect_to('login path'){ login_path }
-      
+    end
+  
+    context "when logged in as the user" do
+      setup do
+        get :edit, {:id => @user_id}, {:user_id => @user.id}
+      end
+      should_assign_to :user
+      should_respond_with :success
+      should_render_template :edit
+    end
+  
+    context "when logged in as someone else" do
+      setup do
+        get :edit, {:id => @user_id}, {:user_id => users(:bar).id}
+      end
+      should_assign_to :user
+      should_respond_with :redirect
+      should_redirect_to('login path'){ login_path }
+    end
+
+  end
+
+  context "when updating a user" do
+    
+    setup do
+      @user       = users(:foo)
+      @user_id    = @user.id
+      @other_user = users(:bar)
     end
     
     context "when logged in as the user" do
       
       setup do
-        get :edit, {:id => @user.id}, {:user_id => @user.id}
+        
+       @good_data = {:user => {
+                     :full_name => "Alain Bloch",
+                     :username  => "alainbloch",
+                     :email => "alainbloch@gmail.com", 
+                     :password => "secret", 
+                     :password_confirmation => "secret"}}
+                     
+       @bad_data  = {:user => {
+                     :full_name => "Alain Bloch",
+                     :username  => "alain bloch",
+                     :email => "alain@bloch@gmail.com", 
+                     :password => "se33", 
+                     :password_confirmation => "cr3t"}}
+                     
       end
-      
-      should_assign_to :user
-      should_respond_with :success
-      should_render_template :edit
-      
+ 
+      should "successfully update with good data" do
+        put :update, {:id => @user_id}.merge(@good_data), {:user_id => @user.id}
+        assert_response :redirect
+        assert_redirected_to edit_user_path(@user.reload)
+        assert_equal "User has been updated.", flash[:notice]
+        assert_equal @good_data[:user][:full_name], @user.reload.full_name
+      end
+    
+      should "not update with bad data" do
+        put :update, {:id => @user_id}.merge(@bad_data), {:user_id => @user.id}
+        assert_response :success
+        assert_template 'edit'
+        assert_not_nil assigns(:user).errors
+      end
+
     end
+
     
     context "when logged in as someone else" do
-      
-      setup do
-        get :edit, {:id => @user.id}, {:user_id => users(:bar).id}
+      setup do 
+        put :update, {:id => @user_id}, {:user_id => @other_user.id}
       end
-      
-      should_assign_to :user
       should_respond_with :redirect
       should_redirect_to('login path'){ login_path }
-      
     end
-  
+    
+    context "when not logged in" do
+      setup do
+        put :update, {:id => @user_id}
+      end
+      should_respond_with :redirect
+      should_redirect_to('login path'){ login_path }
+    end
+    
   end
-  
+    
 end
