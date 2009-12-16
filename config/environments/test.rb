@@ -27,4 +27,6 @@ config.action_mailer.delivery_method = :test
 # like if you have constraints or database-specific column types
 # config.active_record.schema_format = :sql
 
+# Add in the testings gems
 config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
+config.gem "floehopper-mocha",   :lib => "mocha",   :source => "http://gems.github.com"
