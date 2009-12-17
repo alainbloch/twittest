@@ -2,11 +2,16 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
   <head>
-    <title><%= h(yield(:title) || "Untitled") %></title>
+    <title><%= h(yield(:title) || "Twittest") %></title>
     <%= stylesheet_link_tag 'application' %>
     <%= yield(:head) %>
   </head>
   <body>
+    <div id="wrap">
+    <div id="header">
+      <%= render :partial => "shared/navigation" %>
+      <h1><%= link_to "Twittest", root_path %></h1>
+    </div>
     <div id="container">
       <%- flash.each do |name, msg| -%>
         <%= content_tag :div, msg, :id => "flash_#{name}" %>
@@ -17,6 +22,7 @@
       <%- end -%>
       
       <%= yield %>
+    </div>
     </div>
   </body>
 </html>
