@@ -19,8 +19,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    # get_user
+    respond_to do |format|
     @messages = @user.messages.paginate(:page => params[:page], :per_page => 8)
+    format.html{} #show.html.erb
+    format.js{ render @messages }
+    end
   end
   
   def edit
