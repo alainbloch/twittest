@@ -1,0 +1,9 @@
+<div id="navigation">
+  <% if logged_in? %>
+    <%= link_to "Home", root_path %>&nbsp;|
+    <%= link_to "Logout", logout_path %>
+  <% else %>
+    <%= link_to "Login", login_path %>&nbsp;|
+    <%= link_to "Sign Up", signup_path %>
+  <% end %>
+</div>
