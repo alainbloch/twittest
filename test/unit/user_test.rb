@@ -16,6 +16,8 @@ class UserTest < ActiveSupport::TestCase
   context "a user instance" do
     should_have_many :followers
     should_have_many :followings
+    should_have_many :users_followed
+    should_have_many :follows
   end
   
   context "a new user" do
@@ -113,6 +115,21 @@ class UserTest < ActiveSupport::TestCase
       
     end
   
+  end
+
+  context "destroying a user" do
+    setup do
+      @user_foo = users(:foo)
+      @user_bar = users(:bar)
+      Following.destroy_all
+      @user_foo.followings.create(:follower => @user_bar)
+    end
+    
+    should "remove all followings" do
+      @user_bar.destroy
+      assert 0, Following.count
+    end
+    
   end
 
 end
