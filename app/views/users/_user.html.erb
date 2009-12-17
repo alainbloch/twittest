@@ -1,3 +1,7 @@
-<li>
-  
+<li id="user_<%= user.id%>">
+  <div><% content_tag :a, :href => user_path(user.username) do %>
+        <%= image_tag user.icon %>
+        <%= user.username %>
+      <% end %>
+  <div>
 </li>
