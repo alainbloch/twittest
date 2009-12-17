@@ -1,0 +1,15 @@
+<% title %(#{current_user.username}'s Stream) %>
+
+<div class="col1">
+  <h2>What's Happening?</h2>
+  <%= render :partial => "messages/form" %>
+
+  <h2>Home</h2>
+  <ul id="stream">
+    <%= render :partial => "messages/message", :collection => @feed %>
+  </ul>
+</div>
+
+<div class="col2">
+  <%= render :partial => "shared/user_info"%>
+</div>
