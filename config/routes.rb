@@ -3,9 +3,8 @@ ActionController::Routing::Routes.draw do |map|
   map.logout 'logout', :controller => 'sessions', :action => 'destroy'
   map.login 'login', :controller => 'sessions', :action => 'new'
   map.resources :sessions
-  map.resources :followings
   map.resources :users, :member => {:follows => :get, :followers => :get} do |user|
-    user.resources :followings, :only => [:create, :edit]
+    user.resources :followings, :only => [:create, :destroy]
   end
   map.resources :messages, :only => [:create]
    
