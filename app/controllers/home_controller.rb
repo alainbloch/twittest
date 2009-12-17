@@ -3,9 +3,9 @@ class HomeController < ApplicationController
   def index
     @messages = 
     if logged_in?
-      current_user.feed.paginate(:page => params[:page])
+      current_user.feed.paginate(:page => params[:page], :order => "created_at DESC", :per_page => 20)
     else
-      Message.find(:all, :limit => 20, :order => "created_at ASC")
+      Message.find(:all, :limit => 20, :order => "created_at DESC")
     end
     respond_to do |format|
       format.html do
@@ -15,9 +15,7 @@ class HomeController < ApplicationController
           render :template => "/home/dashboard"
         end
       end
-      format.js do
-      render @messages
-      end
+      format.js {render @messages}
     end
   end
   
