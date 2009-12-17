@@ -6,9 +6,12 @@
 
   <h2>Home</h2>
   <ul id="stream">
-    <%= render :partial => "messages/message", :collection => @feed %>
+    <%= render :partial => "messages/message", :collection => @messages %>
   </ul>
+  <%= will_paginate @messages %>
 </div>
+
+<%= periodically_call_remote(:url => root_url, :frequency => '20', :update => 'stream') %>
 
 <div class="col2">
   <%= render :partial => "shared/user_info"%>
