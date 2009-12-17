@@ -30,3 +30,5 @@ config.action_mailer.delivery_method = :test
 # Add in the testings gems
 config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
 config.gem "floehopper-mocha",   :lib => "mocha",   :source => "http://gems.github.com"
+
+require 'ruby-debug'
