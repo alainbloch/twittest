@@ -1,7 +1,7 @@
 <% title %(#{@user.username}'s Followers) %>
 
 <div class="col1">
-
+  <%= render :partial => "user", :collection => @followers %>
 </div>
 
 <div class="col2">
