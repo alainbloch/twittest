@@ -13,9 +13,10 @@ class Message < ActiveRecord::Base
 private
 
   def check_for_recipient
-    recipient_username = self.body.match(/^@([-\w\._@]+)/)[1]
-    unless recipient_username.blank?
-      self.recipient = User.find_by_username(recipient_username)
+    match = self.body.match(/^@([-\w\._]+)/)
+    unless match.blank?
+      # first match includes @. second match is just the username
+      self.recipient = User.find_by_username(match[1])
     end
   end
   
