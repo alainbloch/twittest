@@ -20,6 +20,7 @@ Rails::Initializer.run do |config|
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
   
+  config.gem 'rgrove-sanitize',:version=>'1.0.8' ,:lib => 'sanitize', :source => 'http://gems.github.com'
   config.gem "faker"
   config.gem "populator"
 
