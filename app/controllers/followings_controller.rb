@@ -24,7 +24,7 @@ class FollowingsController < ApplicationController
   def destroy
     respond_to do |format|
       following = @user.followings.find_by_follower_id(current_user)
-      if not following.nil? and following.destry
+      if not following.nil? and following.destroy
         message = "You are not following #{current_user.full_name} anymore"
         format.html do
           flash[:notice] = message
