@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   
-  before_filter :get_user, :only => [:show, :edit, :update, :destroy]
+  before_filter :get_user, :only => [:show, :edit, :update, :destroy, :followers, :follows]
   before_filter :correct_user_required, :only => [:edit, :update, :destroy]
   
   def new
@@ -20,6 +20,7 @@ class UsersController < ApplicationController
 
   def show
     # get_user
+    @messages = @user.messages.paginate(:page => params[:page])
   end
   
   def edit
@@ -29,7 +30,7 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(params[:user])
       flash[:notice] = "User has been updated."
-      redirect_to edit_user_path(@user)
+      redirect_to user_path(@user.username)
     else
       flash[:error]  = "Something went wrong."
       render :action => "edit"
@@ -41,10 +42,18 @@ class UsersController < ApplicationController
     redirect_to logout_path
   end
   
+  def follows
+    @users_followed = @user.users_followed.paginate(:page => params[:page])
+  end
+  
+  def followers
+    @followers = @user.followers.paginate(:page => params[:page])
+  end
+  
 private
   
   def get_user
-    @user = User.find_by_id(params[:id])
+    @user = User.find_by_username(params[:id])
   end
   
   def correct_user_required
