@@ -4,7 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'sessions', :action => 'new'
   map.resources :sessions
   map.resources :followings
-  map.resources :users do |user|
+  map.resources :users, :member => {:follows => :get, :followers => :get} do |user|
     user.resources :followings, :only => [:create, :edit]
   end
   map.resources :messages, :only => [:create]
