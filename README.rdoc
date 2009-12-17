@@ -4,4 +4,6 @@ Twit. Twitter. Twittest.
 
 Its a twitter test.
 
-:-P
+:-T
+
+Copyright (c) 2009 RubyMiner LLC, released under the MIT license
