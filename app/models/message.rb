@@ -10,6 +10,8 @@ class Message < ActiveRecord::Base
   
   before_save :check_for_recipient
   
+  html_sanitizer :sanitize => [:body]
+  
 private
 
   def check_for_recipient
