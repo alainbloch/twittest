@@ -61,8 +61,41 @@ class FollowingsControllerTest < ActionController::TestCase
     context "when logged in" do
       
       setup do
-      
+        @user = users(:foo)
+        @other_user = users(:bar)
+        Following.destroy_all
+        post :create, {:user_id => @other_user.id, :format => :js}, {:user_id => @user.id}
+        assert 1, Following.count
       end
+      
+      context "using javascript" do
+                
+        should "be successful with a valid user" do
+          delete :destroy, {:user_id => @other_user.id, :format => :js}, {:user_id => @user.id}
+          assert 0, Following.count
+        end
+      
+        should "not be successful without a valid user" do
+          delete :destroy, {:user_id => nil, :format => :js}, {:user_id => @user.id}
+          assert 1, Following.count
+        end
+
+      end
+      
+      context "using http" do
+                
+        should "be successful with a valid user" do
+          delete :destroy, {:user_id => @other_user.id}, {:user_id => @user.id}
+          assert 0, Following.count
+        end
+      
+        should "not be successful without a valid user" do
+          delete :destroy, {:user_id => nil}, {:user_id => @user.id}
+          assert 1, Following.count
+        end
+        
+      end
+      
       
     end
     

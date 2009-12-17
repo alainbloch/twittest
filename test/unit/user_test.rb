@@ -18,6 +18,7 @@ class UserTest < ActiveSupport::TestCase
     should_have_many :followings
     should_have_many :users_followed
     should_have_many :follows
+    should_have_many :messages
     should_not_allow_mass_assignment_of :password_hash, :password_salt
   end
   
