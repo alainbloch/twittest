@@ -4,8 +4,10 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'sessions', :action => 'new'
   map.resources :sessions
   map.resources :followings
-  map.resources :users
-  
+  map.resources :users do |user|
+    user.resources :followings, :only => [:create, :edit]
+  end
+   
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
