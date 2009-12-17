@@ -131,7 +131,7 @@ class UsersControllerTest < ActionController::TestCase
       should "successfully update with good data" do
         put :update, {:id => @user_id}.merge(@good_data), {:user_id => @user.id}
         assert_response :redirect
-        assert_redirected_to edit_user_path(@user.reload)
+        assert_redirected_to user_path(@user.reload.username)
         assert_equal "User has been updated.", flash[:notice]
         assert_equal @good_data[:user][:full_name], @user.reload.full_name
       end
