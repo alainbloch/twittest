@@ -46,13 +46,10 @@ class User < ActiveRecord::Base
   end
   
   def feed
-    self.messages
-=begin
+    user_id_range = (self.users_followed.map(&:id) + [self.id]) 
     Message.find(:all, 
-                 :joins => "INNER JOIN users p ON activities.person_id = p.id",
-                 :conditions => [], 
-          :order => 'messages.created_at DESC')
-=end
+                 :conditions => ["user_id IN (?) OR recipient_id = ?", user_id_range, self.id ], 
+                 :order => 'created_at DESC')
   end
   
   def main_photo
