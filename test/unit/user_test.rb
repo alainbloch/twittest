@@ -129,7 +129,7 @@ class UserTest < ActiveSupport::TestCase
     end
     
     should "have a feed composed of the messages of the users that the user follows" do
-      flunk
+      assert Array, @user.feed.class
     end
 
   
