@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 
   def show
     # get_user
-    @messages = @user.messages.paginate(:page => params[:page])
+    @messages = @user.messages.paginate(:page => params[:page], :per_page => 8)
   end
   
   def edit
