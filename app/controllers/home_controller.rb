@@ -6,6 +6,8 @@ class HomeController < ApplicationController
       @feed = current_user.feed.paginate(:page => params[:page])
       @message = Message.new
       render :template => "/home/dashboard"
+    else
+      @feed = Message.find(:all, :limit => 20, :order => "created_at ASC")
     end
   end
   
