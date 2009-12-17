@@ -92,9 +92,9 @@ class UserTest < ActiveSupport::TestCase
   context "a created user" do
     
     setup do
-      User.delete_all
       @user = new_user(:username => 'foobar', :password => 'secret', :email => 'foo@bar.com')
       @user.save!
+      @user2 = users(:foo)
     end
     
     context "when authenticating" do
@@ -116,6 +116,22 @@ class UserTest < ActiveSupport::TestCase
       end
       
     end
+    
+    should "have follows? method return true if they're following a user" do
+      @user.follows.create(:user => @user2)
+      assert true, @user.reload.follows?(@user2)
+    end
+
+    should "have follows? method return false if they're not following a user" do
+      @user.follows.destroy_all
+      assert 0, @user.follows.count
+      assert false, @user.follows?(@user2)      
+    end
+    
+    should "have a feed composed of the messages of the users that the user follows" do
+      flunk
+    end
+
   
   end
 

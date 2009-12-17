@@ -1,8 +1,29 @@
 require 'test_helper'
 
 class HomeControllerTest < ActionController::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+
+  context "home index" do
+    
+    context "when logged in" do
+      setup do
+        post :index, {}, {:user_id => users(:foo).id}
+      end
+      
+      should_assign_to :feed
+      should_render_template :dashboard
+      
+    end
+    
+    context "when not logged in" do
+      setup do
+        post :index
+      end
+      
+      should_not_assign_to :feed
+      should_render_template :index
+            
+    end
+    
   end
+  
 end

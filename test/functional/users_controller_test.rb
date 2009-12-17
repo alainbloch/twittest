@@ -32,7 +32,7 @@ class UsersControllerTest < ActionController::TestCase
   
     setup do
       @user = users(:foo)
-      @user_id = @user.id
+      @user_id = @user.username
     end
   
     context "when not logged in" do
@@ -68,7 +68,7 @@ class UsersControllerTest < ActionController::TestCase
     
     setup do
       @user = users(:foo)
-      @user_id = @user.id
+      @user_id = @user.username
     end
   
     context "when not logged in" do
@@ -104,7 +104,7 @@ class UsersControllerTest < ActionController::TestCase
     
     setup do
       @user       = users(:foo)
-      @user_id    = @user.id
+      @user_id    = @user.username
       @other_user = users(:bar)
     end
     
@@ -162,6 +162,28 @@ class UsersControllerTest < ActionController::TestCase
       should_redirect_to('login path'){ login_path }
     end
     
+  end
+  
+  context "when viewing a user's followers" do
+    setup do
+      get :followers, :id => users(:foo).username
+      assert_response :success
+    end
+    should_assign_to :followers
+    
+    should_render_template :followers
+    
+  end
+  
+  context "when viewing who the user follows" do
+    setup do
+      get :follows, :id => users(:foo).username
+      assert_response :success    
+    end
+    
+    should_assign_to :users_followed
+    should_render_template :follows
+
   end
     
 end
