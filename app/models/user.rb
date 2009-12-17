@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   # new columns need to be added here to be writable through mass assignment
-  attr_accessible :username, :email, :password, :password_confirmation, :full_name, :bio
+  attr_accessible :username, :email, :password, :password_confirmation, :full_name, :bio, :avatar
   
   attr_accessor :password
   before_save :prepare_password
@@ -23,7 +23,13 @@ class User < ActiveRecord::Base
   has_many :followings
   has_many :followers, :through => :followings
   
-  has_many :messages
+  has_many :messages, :dependent => :destroy
+  
+  html_sanitizer :sanitize => [:full_name, :bio]
+  
+  has_attached_file :avatar, :styles => {:normal => "533x400#",
+                                         :thumbnail    => '72>',
+                                         :icon => '36x36>' }
   
   # login can be either username or email address
   def self.authenticate(login, pass)
@@ -33,6 +39,32 @@ class User < ActiveRecord::Base
   
   def matching_password?(pass)
     self.password_hash == encrypt_password(pass)
+  end
+  
+  def follows?(user)
+    !self.follows.find_by_user_id(user).nil?
+  end
+  
+  def feed
+    self.messages
+=begin
+    Message.find(:all, 
+                 :joins => "INNER JOIN users p ON activities.person_id = p.id",
+                 :conditions => [], 
+          :order => 'messages.created_at DESC')
+=end
+  end
+  
+  def main_photo
+    avatar.exists? ? avatar.url(:original) : "default.png" 
+  end
+
+  def thumbnail
+    avatar.exists? ? avatar.url(:thumbnail) : "default_thumbnail.png"
+  end
+
+  def icon    
+    avatar.exists? ? avatar.url(:icon) : "default_icon.png" 
   end
   
   private
