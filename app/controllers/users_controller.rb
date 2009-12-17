@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 
   def show
     respond_to do |format|
-    @messages = @user.messages.paginate(:page => params[:page], :per_page => 8)
+    @messages = @user.messages.paginate(:page => params[:page], :per_page => 8, :order => "created_at DESC")
     format.html{} #show.html.erb
     format.js{ render @messages }
     end
