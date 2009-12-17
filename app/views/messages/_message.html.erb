@@ -1,0 +1,11 @@
+<li id="message_<%= message.id%>">
+  <% user = message.user %>
+  <div><% content_tag :a, :href => user_path(user.username) do %>
+        <%= image_tag user.icon %>
+        <%= user.username %>
+      <% end %>
+  <div>
+    <%= message.body %>
+  </div>
+  <span>sent <%= time_ago_in_words message.created_at %> ago</span>
+</li>
