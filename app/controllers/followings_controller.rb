@@ -7,14 +7,14 @@ class FollowingsController < ApplicationController
         message = "You are now following #{current_user.full_name}"
         format.html do
           flash[:notice] = message
-          redirect_to user_path(@user)
+          redirect_to user_path(@user.username)
         end
         format.js{render(:update){|page| page.alert message}}
       else
         message = "Something went wrong!"
         format.html do
           flash[:error] = message
-          redirect_to user_path(@user)
+          redirect_to user_path(@user.username)
         end
         format.js{render(:update){|page| page.alert message}}
       end
@@ -28,14 +28,14 @@ class FollowingsController < ApplicationController
         message = "You are not following #{current_user.full_name} anymore"
         format.html do
           flash[:notice] = message
-          redirect_to user_path(@user)
+          redirect_to user_path(@user.username)
         end
         format.js{render(:update){|page| page.alert message}}
       else
         message = "Something went wrong!"
         format.html do
           flash[:error] = message
-          redirect_to user_path(@user)
+          redirect_to user_path(@user.username)
         end
         format.js{render(:update){|page| page.alert message}}
       end
@@ -45,7 +45,7 @@ class FollowingsController < ApplicationController
 private
 
   def get_user
-    @user = User.find_by_id(params[:user_id])
+    @user = User.find_by_username(params[:user_id])
   end
   
   def user_required
