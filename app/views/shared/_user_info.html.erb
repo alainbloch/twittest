@@ -10,9 +10,9 @@
 
 <% unless current_user == @user %>
   <% if current_user.follows?(@user)%>
-    <%= link_to "Follow", user_followings_path(@user), :method => :post %>
+    <%= link_to "Stop following", user_following_path(@user.username), :method => :delete, :confirm => "Are you sure?" %>    
   <% else %>
-    <%= link_to "Stop following", user_followings_path(@user), :method => :delete, :confirm => "Are you sure?" %>    
+    <%= link_to "Follow", user_followings_path(@user.username), :method => :post %>
   <% end %>
 <% else %>
   <%= link_to "Edit your account", edit_user_path(@user.username) %>
