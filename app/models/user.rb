@@ -14,6 +14,14 @@ class User < ActiveRecord::Base
   validates_length_of :password, :minimum => 4, :allow_blank => true
   validates_length_of :full_name, :maximum => 40
   validates_length_of :bio, :maximum => 160, :allow_blank => true
+    
+  # users who the user follows
+  has_many :follows, :class_name => "Following", :foreign_key => "follower_id", :dependent => :destroy
+  has_many :users_followed, :through => :follows, :source => :user
+  
+  # users who are following the user
+  has_many :followings
+  has_many :followers, :through => :followings
   
   # login can be either username or email address
   def self.authenticate(login, pass)
