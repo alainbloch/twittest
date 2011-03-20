@@ -1,19 +1,10 @@
 <% title "Edit your account" %>
 
-<% form_for @user, :url => user_path(@user.username), :html => {:method => :put, :multipart => true} do |f| %>
+<% form_for @user, :url => user_path(@user.name), :html => {:method => :put, :multipart => true} do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= image_tag @user.thumbnail %><br/>
-    <%= f.label :avatar %><br />
-    <%= f.file_field :avatar %>
-  </p>
-  <p>
-    <%= f.label :full_name %><br />
-    <%= f.text_field :full_name %>
-  </p>
-  <p>
-    <%= f.label :username %><br />
-    <%= f.text_field :username %>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
   </p>
   <p>
     <%= f.label :email, "Email Address" %><br />
@@ -26,10 +17,6 @@
   <p>
     <%= f.label :password %><br />
     <%= f.password_field :password %>
-  </p>
-  <p>
-    <%= f.label :password_confirmation, "Confirm Password" %><br />
-    <%= f.password_field :password_confirmation %>
   </p>
   <p><%= f.submit "Update" %> or <%= link_to "Cancel", root_path %></p>
   

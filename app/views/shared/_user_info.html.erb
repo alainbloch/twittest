@@ -1,6 +1,5 @@
 <div>
-  <%= image_tag @user.thumbnail %><br/>
-  <strong>Name</strong> <%= link_to @user.username,  user_path(@user.username) %></div>
+  <strong>Name</strong> <%= link_to @user.name,  user_path(@user.name) %></div>
   <strong>Bio</strong>
   <div>
     <%= @user.bio %>
@@ -10,12 +9,12 @@
 
 <% unless current_user == @user %>
   <% if current_user.follows?(@user)%>
-    <%= link_to "Stop following", user_following_path(@user.username), :method => :delete, :confirm => "Are you sure?" %>    
+    <%= link_to "Stop following", user_following_path(@user.name), :method => :delete, :confirm => "Are you sure?" %>    
   <% else %>
-    <%= link_to "Follow", user_followings_path(@user.username), :method => :post %>
+    <%= link_to "Follow", user_followings_path(@user.name), :method => :post %>
   <% end %>
 <% else %>
-  <%= link_to "Edit your account", edit_user_path(@user.username) %>
+  <%= link_to "Edit your account", edit_user_path(@user.name) %>
 <% end %>
 <% else %>
   <%= link_to "Sign Up", signup_path %> or <%= link_to "Login", login_path %> to follow!
@@ -24,12 +23,12 @@
 <div>
   <ul>
     <li id="user_followers">
-      <% content_tag :a, :href => followers_user_path(@user.username) do %>
+      <% content_tag :a, :href => followers_user_path(@user.name) do %>
         <%= @user.followings.count %> Followers
       <% end %>
     </li>
     <li id="user_follows">
-      <% content_tag :a, :href => follows_user_path(@user.username) do %>
+      <% content_tag :a, :href => follows_user_path(@user.name) do %>
         <%= @user.follows.count %> Following
       <% end %>
     </li>

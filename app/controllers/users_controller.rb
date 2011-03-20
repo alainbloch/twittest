@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      session[:user_id] = @user.id
       flash[:notice] = "Thank you for signing up! You are now logged in."
       redirect_to root_url
     else
@@ -33,7 +32,7 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(params[:user])
       flash[:notice] = "User has been updated."
-      redirect_to user_path(@user.username)
+      redirect_to user_path(@user.name)
     else
       flash[:error]  = "Something went wrong."
       render :action => "edit"
@@ -56,7 +55,7 @@ class UsersController < ApplicationController
 private
   
   def get_user
-    @user = User.find_by_username(params[:id])
+    @user = User.find_by_name(params[:id])
   end
   
   def correct_user_required

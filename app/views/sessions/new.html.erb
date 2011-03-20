@@ -2,14 +2,15 @@
 
 <p>Don't have an account? <%= link_to "Sign up!", signup_path %></p>
 
-<% form_tag sessions_path do %>
+<% form_for :user, :url => sessions_path do |f| %>
   <p>
-    <%= label_tag :login, "Username or Email Address" %><br />
-    <%= text_field_tag :login, params[:login] %>
+    <%= label_tag :email, "Email Address" %><br />
+    <%= f.text_field :email, :size => 20 %>
   </p>
   <p>
     <%= label_tag :password %><br />
-    <%= password_field_tag :password %>
+    <%= f.password_field :password, :size => 20 %>
   </p>
+
   <p><%= submit_tag "Log in" %></p>
 <% end %>

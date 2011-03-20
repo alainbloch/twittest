@@ -17,8 +17,8 @@ private
   def check_for_recipient
     match = self.body.match(/^@([-\w\._]+)/)
     unless match.blank?
-      # first match includes @. second match is just the username
-      self.recipient = User.find_by_username(match[1])
+      # first match includes @. second match is just the name
+      self.recipient = User.find_by_name(match[1])
     end
   end
   

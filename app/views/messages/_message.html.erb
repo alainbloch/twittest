@@ -1,8 +1,7 @@
 <li id="message_<%= message.id%>">
   <% user = message.user %>
-  <div><% content_tag :a, :href => user_path(user.username) do %>
-        <%= image_tag user.icon %>
-        <%= user.username %>
+  <div><% content_tag :a, :href => user_path(user.name) do %>
+        <%= user.name %>
       <% end %>
   <div>
     <%= message.body %>

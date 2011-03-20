@@ -4,17 +4,17 @@ class FollowingsController < ApplicationController
   def create
     respond_to do |format|
       if @user.followings.create(:follower => current_user)
-        message = "You are now following #{current_user.full_name}"
+        message = "You are now following #{@user.name}"
         format.html do
           flash[:notice] = message
-          redirect_to user_path(@user.username)
+          redirect_to user_path(@user.name)
         end
         format.js{render(:update){|page| page.alert message}}
       else
         message = "Something went wrong!"
         format.html do
           flash[:error] = message
-          redirect_to user_path(@user.username)
+          redirect_to user_path(@user.name)
         end
         format.js{render(:update){|page| page.alert message}}
       end
@@ -25,17 +25,17 @@ class FollowingsController < ApplicationController
     respond_to do |format|
       following = @user.followings.find_by_follower_id(current_user)
       if not following.nil? and following.destroy
-        message = "You are not following #{current_user.full_name} anymore"
+        message = "You are not following #{@user.name} anymore"
         format.html do
           flash[:notice] = message
-          redirect_to user_path(@user.username)
+          redirect_to user_path(@user.name)
         end
         format.js{render(:update){|page| page.alert message}}
       else
         message = "Something went wrong!"
         format.html do
           flash[:error] = message
-          redirect_to user_path(@user.username)
+          redirect_to user_path(@user.name)
         end
         format.js{render(:update){|page| page.alert message}}
       end
@@ -45,7 +45,7 @@ class FollowingsController < ApplicationController
 private
 
   def get_user
-    @user = User.find_by_username(params[:user_id])
+    @user = User.find_by_name(params[:user_id])
   end
   
   def user_required

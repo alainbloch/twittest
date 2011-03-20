@@ -1,9 +1,8 @@
-<% title "Twit. Twitter. Twittest." %>
-
-<p>
-  Its like test for Twitter.
-  You should <%= link_to "Sign up", signup_path %> or <%= link_to "Login", login_path %>
-</p>
+<% if not logged_in? %>
+  <p>
+    You should <%= link_to "Sign up", signup_path %> or <%= link_to "Login", login_path %>
+  </p>
+<% end %>
 
 <h2>Latest Messages</h2>
 <ul id="stream">
