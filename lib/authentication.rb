@@ -3,7 +3,7 @@
 # common example you might add to your application layout file.
 # 
 #   <% if logged_in? %>
-#     Welcome <%=h current_user.username %>! Not you?
+#     Welcome <%=h current_user.name %>! Not you?
 #     <%= link_to "Log out", logout_path %>
 #   <% else %>
 #     <%= link_to "Sign up", signup_path %> or
@@ -15,13 +15,18 @@
 # 
 #   before_filter :login_required, :except => [:index, :show]
 module Authentication
+
   def self.included(controller)
-    controller.send :helper_method, :current_user, :logged_in?, :redirect_to_target_or_default
+    controller.send :helper_method, :current_user, :login_required, :current_user_session, :logged_in?, :redirect_to_target_or_default
     controller.filter_parameter_logging :password
   end
   
   def current_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+    @current_user ||= current_user_session && current_user_session.record
+  end
+  
+  def current_user_session
+    @current_user_session ||= UserSession.find
   end
   
   def logged_in?
@@ -46,4 +51,5 @@ module Authentication
   def store_target_location
     session[:return_to] = request.request_uri
   end
+
 end

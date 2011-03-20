@@ -15,11 +15,9 @@ User.destroy_all
 # Adding Users
 100.times do
   name = Faker::Name.first_name
-  User.create(:username  => name.downcase,
+  User.create(:name  => name.downcase,
               :email     => Faker::Internet.email,
-              :full_name => name,
               :password  => "secret",
-              :password_confirmation => "secret",
               :bio => Faker::Lorem.sentence)
 end
 

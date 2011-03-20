@@ -34,9 +34,9 @@ class MessageTest < ActiveSupport::TestCase
       assert new_message(:body => Faker::Lorem.paragraphs(2).to_s).errors.on(:body)
     end
     
-    should "send the message to a recipient if the body is prepended with @username" do
+    should "send the message to a recipient if the body is prepended with @name" do
       user = users(:bar)
-      message = new_message(:body => "@#{user.username} how ya doing?")
+      message = new_message(:body => "@#{user.name} how ya doing?")
       message.save
       assert message.recipient, user
     end

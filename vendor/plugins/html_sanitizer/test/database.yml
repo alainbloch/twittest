@@ -7,12 +7,12 @@ sqlite3:
 mysql:
   :adapter: mysql
   :host: localhost
-  :username: root
+  :name: root
   :password:
   :database: html_sanitizer_test
 postgresql:
   :adapter: postgresql
   :host: localhost
-  :username: root
+  :name: root
   :password: 
   :database: html_sanitizer_test

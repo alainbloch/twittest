@@ -32,7 +32,7 @@ class UsersControllerTest < ActionController::TestCase
   
     setup do
       @user = users(:foo)
-      @user_id = @user.username
+      @user_id = @user.name
     end
   
     context "when not logged in" do
@@ -68,7 +68,7 @@ class UsersControllerTest < ActionController::TestCase
     
     setup do
       @user = users(:foo)
-      @user_id = @user.username
+      @user_id = @user.name
     end
   
     context "when not logged in" do
@@ -104,7 +104,7 @@ class UsersControllerTest < ActionController::TestCase
     
     setup do
       @user       = users(:foo)
-      @user_id    = @user.username
+      @user_id    = @user.name
       @other_user = users(:bar)
     end
     
@@ -113,15 +113,13 @@ class UsersControllerTest < ActionController::TestCase
       setup do
         
        @good_data = {:user => {
-                     :full_name => "Alain Bloch",
-                     :username  => "alainbloch",
+                     :name => "Alain Bloch",
                      :email => "alainbloch@gmail.com", 
                      :password => "secret", 
                      :password_confirmation => "secret"}}
                      
        @bad_data  = {:user => {
-                     :full_name => "Alain Bloch",
-                     :username  => "alain bloch",
+                     :name => "Alain Bloch",
                      :email => "alain@bloch@gmail.com", 
                      :password => "se33", 
                      :password_confirmation => "cr3t"}}
@@ -131,9 +129,9 @@ class UsersControllerTest < ActionController::TestCase
       should "successfully update with good data" do
         put :update, {:id => @user_id}.merge(@good_data), {:user_id => @user.id}
         assert_response :redirect
-        assert_redirected_to user_path(@user.reload.username)
+        assert_redirected_to user_path(@user.reload.name)
         assert_equal "User has been updated.", flash[:notice]
-        assert_equal @good_data[:user][:full_name], @user.reload.full_name
+        assert_equal @good_data[:user][:name], @user.reload.name
       end
     
       should "not update with bad data" do
@@ -166,7 +164,7 @@ class UsersControllerTest < ActionController::TestCase
   
   context "when viewing a user's followers" do
     setup do
-      get :followers, :id => users(:foo).username
+      get :followers, :id => users(:foo).name
       assert_response :success
     end
     should_assign_to :followers
@@ -177,7 +175,7 @@ class UsersControllerTest < ActionController::TestCase
   
   context "when viewing who the user follows" do
     setup do
-      get :follows, :id => users(:foo).username
+      get :follows, :id => users(:foo).name
       assert_response :success    
     end
     

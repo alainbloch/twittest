@@ -3,8 +3,8 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   
   def new_user(attributes = {})
-    attributes[:full_name] ||= 'Alain Bloch'
-    attributes[:username] ||= 'alainbloch'
+    attributes[:name] ||= 'Alain Bloch'
+    attributes[:name] ||= 'alainbloch'
     attributes[:email] ||= 'alainbloch@gmail.com'
     attributes[:password] ||= 'abc123'
     attributes[:password_confirmation] ||= attributes[:password]
@@ -39,15 +39,15 @@ class UserTest < ActiveSupport::TestCase
   
     should "not be valid if full name is too long" do
       long_name = Faker::Lorem.paragraph
-      assert(new_user(:full_name => long_name).errors.on(:full_name))
+      assert(new_user(:name => long_name).errors.on(:name))
     end
   
     should "require a full name" do
-      assert new_user(:full_name => '').errors.on(:full_name)
+      assert new_user(:name => '').errors.on(:name)
     end
   
-    should "require a username" do
-      assert new_user(:username => '').errors.on(:username)
+    should "require a name" do
+      assert new_user(:name => '').errors.on(:name)
     end
   
     should "require a password" do
@@ -63,13 +63,13 @@ class UserTest < ActiveSupport::TestCase
       assert new_user(:email => 'bar@example.com').errors.on(:email)
     end
   
-    should "not be valid if username is not unique" do
-      new_user(:username => 'uniquename').save!
-      assert new_user(:username => 'uniquename').errors.on(:username)
+    should "not be valid if name is not unique" do
+      new_user(:name => 'uniquename').save!
+      assert new_user(:name => 'uniquename').errors.on(:name)
     end
   
-    should "not be valid if username has odd characters" do
-      assert new_user(:username => 'odd ^&(@)').errors.on(:username)
+    should "not be valid if name has odd characters" do
+      assert new_user(:name => 'odd ^&(@)').errors.on(:name)
     end
   
     should "not be valid if password is too short" do
@@ -92,14 +92,14 @@ class UserTest < ActiveSupport::TestCase
   context "a created user" do
     
     setup do
-      @user = new_user(:username => 'foobar', :password => 'secret', :email => 'foo@bar.com')
+      @user = new_user(:name => 'foobar', :password => 'secret', :email => 'foo@bar.com')
       @user.save!
       @user2 = users(:foo)
     end
     
     context "when authenticating" do
   
-      should "authenticate by username" do
+      should "authenticate by name" do
         assert_equal @user, User.authenticate('foobar', 'secret')
       end
   
@@ -107,7 +107,7 @@ class UserTest < ActiveSupport::TestCase
         assert_equal @user, User.authenticate('foo@bar.com', 'secret')
       end
   
-      should "not authenticate with a bad username" do
+      should "not authenticate with a bad name" do
         assert_nil User.authenticate('nonexisting', 'secret')
       end
   
