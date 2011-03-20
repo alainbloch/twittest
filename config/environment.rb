@@ -19,13 +19,6 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
-  
-  config.gem 'rgrove-sanitize',:version=>'1.0.8' ,:lib => 'sanitize', :source => 'http://gems.github.com'
-  config.gem "faker", :version => '0.3.1'
-  config.gem "populator"
-  config.gem 'will_paginate'
-  config.gem 'searchlogic'
-  config.gem 'authlogic'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
